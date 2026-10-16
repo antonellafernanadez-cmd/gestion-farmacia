@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import InicioPage from "./pages/Inicio/InicioPage";
 import DashboardPage from "./pages/Dashboard/DashboardPage";
 import MedicamentosPage from "./pages/Medicamentos/MedicamentosPage";
 import CategoriasPage from "./pages/Categorias/CategoriasPage";
@@ -11,7 +12,8 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<DashboardPage />} />
+        <Route index element={<InicioPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="medicamentos" element={<MedicamentosPage />} />
         <Route path="categorias" element={<CategoriasPage />} />
         <Route path="empleados" element={<EmpleadosPage />} />
