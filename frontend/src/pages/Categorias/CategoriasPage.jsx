@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -16,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import categoriasApi from "../../api/categoriasApi";
@@ -145,7 +147,14 @@ export default function CategoriasPage() {
                 )}
                 {categorias.map((categoria) => (
                   <TableRow key={categoria.id} hover>
-                    <TableCell sx={{ fontWeight: 500 }}>{categoria.nombre}</TableCell>
+                    <TableCell sx={{ fontWeight: 500 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                        <Avatar variant="rounded" sx={{ width: 32, height: 32, bgcolor: "#DDF5EA", color: "primary.main" }}>
+                          <CategoryOutlinedIcon fontSize="small" />
+                        </Avatar>
+                        {categoria.nombre}
+                      </Box>
+                    </TableCell>
                     <TableCell sx={{ color: "text.secondary" }}>
                       {categoria.descripcion || "—"}
                     </TableCell>

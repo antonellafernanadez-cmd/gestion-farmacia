@@ -1,12 +1,13 @@
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import MedicationOutlinedIcon from "@mui/icons-material/MedicationOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 
-// Items del menú lateral. Para agregar una pantalla nueva: sumar acá el item
-// y registrar su <Route> en App.jsx.
+// Solo módulos que existen. Para sumar uno: agregar el item acá y su <Route> en App.jsx.
 export const itemsMenu = [
-  { texto: "Dashboard", ruta: "/", icono: DashboardOutlinedIcon },
+  { texto: "Inicio", ruta: "/", icono: HomeOutlinedIcon },
+  { texto: "Dashboard", ruta: "/dashboard", icono: DashboardOutlinedIcon },
   { texto: "Medicamentos", ruta: "/medicamentos", icono: MedicationOutlinedIcon },
   { texto: "Categorías", ruta: "/categorias", icono: CategoryOutlinedIcon },
   { texto: "Empleados", ruta: "/empleados", icono: BadgeOutlinedIcon },

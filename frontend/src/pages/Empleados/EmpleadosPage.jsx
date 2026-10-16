@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Alert,
+  Avatar,
+  Chip,
   Box,
   Button,
   CircularProgress,
@@ -148,11 +150,16 @@ export default function EmpleadosPage() {
                 {empleados.map((empleado) => (
                   <TableRow key={empleado.id} hover>
                     <TableCell sx={{ fontWeight: 500 }}>
-                      {empleado.apellido}, {empleado.nombre}
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                        <Avatar sx={{ width: 32, height: 32, fontSize: 13, bgcolor: "#DDF5EA", color: "primary.dark", fontWeight: 700 }}>
+                          {empleado.nombre[0]}{empleado.apellido[0]}
+                        </Avatar>
+                        {empleado.apellido}, {empleado.nombre}
+                      </Box>
                     </TableCell>
                     <TableCell>{empleado.dni}</TableCell>
                     <TableCell>{empleado.email}</TableCell>
-                    <TableCell>{empleado.cargo}</TableCell>
+                    <TableCell><Chip size="small" label={empleado.cargo} sx={{ bgcolor: "#E8EEF4", color: "#243B53", fontWeight: 600 }} /></TableCell>
                     <TableCell sx={{ color: "text.secondary" }}>
                       {empleado.domicilio || "—"}
                     </TableCell>

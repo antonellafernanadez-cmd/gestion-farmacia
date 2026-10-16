@@ -15,6 +15,8 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import { obtenerResumen } from "../../api/dashboardApi";
 import EncabezadoPagina from "../../components/common/EncabezadoPagina";
+import EstadoChip from "../../components/common/EstadoChip";
+import { estadoVencimiento } from "../../utils/estados";
 import { obtenerMensajeError } from "../../utils/errores";
 
 // Fecha "2026-10-30" -> "30/10/2026" (sin pasar por Date para evitar desfases de zona horaria)
@@ -24,31 +26,28 @@ const formatearFecha = (iso) => (iso ? iso.split("-").reverse().join("/") : "—
 function TarjetaResumen({ titulo, valor, icono }) {
   return (
     <Paper variant="outlined" sx={{ p: 3, display: "flex", alignItems: "center", gap: 2 }}>
-      <Box sx={{ color: "primary.main", display: "flex" }}>{icono}</Box>
+      <Box sx={{ display: "flex", p: 1.5, borderRadius: 2.5, bgcolor: "#DDF5EA", color: "primary.main" }}>{icono}</Box>
       <Box>
-        <Typography variant="h4" component="p" sx={{ fontWeight: 600 }}>
-          {valor}
-        </Typography>
+        <Typography variant="h4" component="p" sx={{ fontWeight: 700, lineHeight: 1.1 }}>{valor}</Typography>
         <Typography color="text.secondary">{titulo}</Typography>
       </Box>
     </Paper>
   );
 }
 
-// Lista de medicamentos (stock bajo / por vencer)
-function ListaMedicamentos({ titulo, medicamentos, detalle, vacio }) {
+// Lista de medicamentos (stock bajo / vencidos y por vencer), con etiqueta de estado
+function ListaMedicamentos({ titulo, medicamentos, detalle, nivelDe, etiqueta, vacio }) {
   return (
     <Paper variant="outlined" sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ mb: 1 }}>
-        {titulo}
-      </Typography>
+      <Typography variant="h6" sx={{ mb: 1 }}>{titulo}</Typography>
       {medicamentos.length === 0 ? (
-        <Typography color="text.secondary">{vacio}</Typography>
+        <EstadoChip nivel="ok" label={vacio} />
       ) : (
         <List dense disablePadding>
           {medicamentos.map((m) => (
-            <ListItem key={m.id} disableGutters>
+            <ListItem key={m.id} disableGutters sx={{ justifyContent: "space-between", gap: 1 }}>
               <ListItemText primary={m.nombre} secondary={detalle(m)} />
+              <EstadoChip nivel={nivelDe(m)} label={etiqueta(m)} />
             </ListItem>
           ))}
         </List>
@@ -142,13 +141,17 @@ export default function DashboardPage() {
               titulo="Stock bajo"
               medicamentos={resumen.stock_bajo ?? []}
               detalle={(m) => `Quedan ${m.stock} unidades`}
-              vacio="No hay medicamentos con stock bajo."
+              nivelDe={(m) => (m.stock === 0 ? "critico" : "aviso")}
+              etiqueta={(m) => (m.stock === 0 ? "Sin stock" : "Stock bajo")}
+              vacio="Sin stock bajo"
             />
             <ListaMedicamentos
-              titulo="Por vencer (próximos 30 días)"
+              titulo="Vencidos y por vencer (30 días)"
               medicamentos={resumen.por_vencer ?? []}
-              detalle={(m) => `Vence el ${formatearFecha(m.fecha_vencimiento)}`}
-              vacio="No hay medicamentos por vencer."
+              detalle={(m) => `Fecha: ${formatearFecha(m.fecha_vencimiento)}`}
+              nivelDe={(m) => (estadoVencimiento(m.fecha_vencimiento) === "vencido" ? "critico" : "aviso")}
+              etiqueta={(m) => (estadoVencimiento(m.fecha_vencimiento) === "vencido" ? "Vencido" : "Por vencer")}
+              vacio="Sin vencimientos"
             />
           </Box>
         </>

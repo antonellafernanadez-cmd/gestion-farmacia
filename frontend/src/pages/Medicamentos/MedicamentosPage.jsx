@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -25,6 +26,8 @@ import EncabezadoPagina from "../../components/common/EncabezadoPagina";
 import DialogoConfirmacion from "../../components/common/DialogoConfirmacion";
 import { useNotificacion } from "../../context/NotificacionContext";
 import { obtenerMensajeError } from "../../utils/errores";
+import EstadoChip from "../../components/common/EstadoChip";
+import { estadoVencimiento } from "../../utils/estados";
 import MedicamentoForm from "./MedicamentosForm";
 
 // Mismo criterio que usa el backend en el dashboard
@@ -40,11 +43,12 @@ const formatearFecha = (iso) => (iso ? iso.split("-").reverse().join("/") : "—
 //   cargar lista -> tabla -> formulario en Dialog -> confirmar eliminar -> Snackbar
 export default function MedicamentosPage() {
   const notificar = useNotificacion();
+  const [parametros, setParametros] = useSearchParams();
 
   const [medicamentos, setMedicamentos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [errorCarga, setErrorCarga] = useState("");
-  const [busqueda, setBusqueda] = useState("");
+  const [busqueda, setBusqueda] = useState(parametros.get("buscar") ?? "");
 
   const [formAbierto, setFormAbierto] = useState(false);
   const [medicamentoEditando, setMedicamentoEditando] = useState(null);
@@ -67,6 +71,15 @@ export default function MedicamentosPage() {
   useEffect(() => {
     cargarMedicamentos();
   }, [cargarMedicamentos]);
+
+  // Desde el Inicio: ?nuevo=1 abre el formulario de alta
+  useEffect(() => {
+    if (parametros.get("nuevo") === "1") {
+      setMedicamentoEditando(null);
+      setFormAbierto(true);
+      setParametros({}, { replace: true });
+    }
+  }, [parametros, setParametros]);
 
   // Filtro por nombre (se hace en el navegador, sobre la lista ya cargada)
   const visibles = useMemo(() => {
@@ -181,13 +194,25 @@ export default function MedicamentosPage() {
                     <TableCell>{medicamento.categoria || "—"}</TableCell>
                     <TableCell align="right">{formatearPrecio(medicamento.precio)}</TableCell>
                     <TableCell align="right">
-                      <Chip
-                        size="small"
-                        label={medicamento.stock}
-                        color={medicamento.stock <= STOCK_BAJO ? "warning" : "default"}
-                      />
+                      {medicamento.stock === 0 ? (
+                        <EstadoChip nivel="critico" label="Sin stock" />
+                      ) : medicamento.stock <= STOCK_BAJO ? (
+                        <EstadoChip nivel="aviso" label={`Stock bajo · ${medicamento.stock}`} />
+                      ) : (
+                        medicamento.stock
+                      )}
                     </TableCell>
-                    <TableCell>{formatearFecha(medicamento.fecha_vencimiento)}</TableCell>
+                    <TableCell>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                        {formatearFecha(medicamento.fecha_vencimiento)}
+                        {estadoVencimiento(medicamento.fecha_vencimiento) === "vencido" && (
+                          <EstadoChip nivel="critico" label="Vencido" />
+                        )}
+                        {estadoVencimiento(medicamento.fecha_vencimiento) === "pronto" && (
+                          <EstadoChip nivel="aviso" label="Por vencer" />
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
                       <Tooltip title="Editar">
                         <IconButton
