@@ -28,7 +28,7 @@ import { obtenerMensajeError } from "../../utils/errores";
 import MedicamentoForm from "./MedicamentosForm";
 
 // Mismo criterio que usa el backend en el dashboard
-const STOCK_BAJO = 10;
+const STOCK_BAJO = 5;
 
 const formatearPrecio = (valor) =>
   Number(valor).toLocaleString("es-AR", { style: "currency", currency: "ARS" });
