@@ -6,7 +6,7 @@ from models.categorias import Categoria
 from models.empleados import Empleado
 from models.medicamentos import Medicamento
 
-STOCK_BAJO = 10        # "stock bajo" hasta esta cantidad
+STOCK_BAJO = 5       # "stock bajo" hasta esta cantidad
 DIAS_POR_VENCER = 30   # "por vencer" dentro de estos días
 
 
