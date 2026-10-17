@@ -15,6 +15,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { obtenerResumen } from "../../api/dashboardApi";
 import { obtenerMensajeError } from "../../utils/errores";
+import { useAuth } from "../../context/AuthContext";
 import { colores } from "../../theme";
 
 // Solo accesos a pantallas que existen.
@@ -22,7 +23,7 @@ const accesos = [
   { titulo: "Registrar medicamento", detalle: "Dar de alta un nuevo producto", ruta: "/medicamentos?nuevo=1", icono: AddCircleOutlineIcon },
   { titulo: "Consultar medicamentos", detalle: "Ver, editar y eliminar", ruta: "/medicamentos", icono: MedicationOutlinedIcon },
   { titulo: "Categorías", detalle: "Organizar los productos", ruta: "/categorias", icono: CategoryOutlinedIcon },
-  { titulo: "Empleados", detalle: "Gestionar el personal", ruta: "/empleados", icono: BadgeOutlinedIcon },
+  { titulo: "Empleados", detalle: "Gestionar el personal", ruta: "/empleados", icono: BadgeOutlinedIcon, roles: ["admin"] },
   { titulo: "Dashboard", detalle: "Resumen general", ruta: "/dashboard", icono: DashboardOutlinedIcon },
 ];
 
@@ -66,6 +67,9 @@ function BloqueAlerta({ nivel, titulo, items, detalle }) {
 
 export default function InicioPage() {
   const navigate = useNavigate();
+  const { usuario } = useAuth();
+  // Los accesos con `roles` solo los ve ese rol (ej.: Empleados es de administración)
+  const accesosVisibles = accesos.filter((a) => !a.roles || a.roles.includes(usuario?.rol));
   const [texto, setTexto] = useState("");
   const [resumen, setResumen] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -112,7 +116,7 @@ export default function InicioPage() {
 
       <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Accesos rápidos</Typography>
       <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", mb: 4 }}>
-        {accesos.map(({ titulo, detalle, ruta, icono: Icono }) => (
+        {accesosVisibles.map(({ titulo, detalle, ruta, icono: Icono }) => (
           <Card key={titulo} variant="outlined" sx={{ transition: "border-color .15s", "&:hover": { borderColor: "primary.light" } }}>
             <CardActionArea component={RouterLink} to={ruta} sx={{ p: 2.5, height: "100%" }}>
               <Box sx={{ display: "inline-flex", p: 1, mb: 1.5, borderRadius: 2, bgcolor: colores.menta, color: "primary.main" }}>
