@@ -32,6 +32,12 @@ CREATE TABLE empleados (
   domicilio VARCHAR(100)
 ) ENGINE=InnoDB;
 
+CREATE TABLE cuentas (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  email         VARCHAR(120) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  rol           VARCHAR(20)  NOT NULL
+) ENGINE=InnoDB;
 
 INSERT INTO categorias (nombre, descripcion) VALUES
   ('Analgesicos',   'Alivia el dolor (cabeza, muscular, dental o menstrual) y algunos como el Paracetamol ayudan a reducir la fiebre'),
@@ -59,3 +65,7 @@ INSERT INTO empleados (nombre, apellido, dni, email, cargo, domicilio) VALUES
   ('Sofia',   'Gomez', '35345678', 'sofia.gomez@farmacia.com', 'Vendedora',      'Italia 789, Godoy Cruz'),
   ('Diego',   'Perez',     '33456789', 'diego.perez@farmacia.com',     'Cadete',         'Mitre 321, Luján de Cuyo'),
   ('Valeria', 'Sosa',      '31567890', 'valeria.sosa@farmacia.com',    'Administrativa', 'Peru 654, Maipu');
+
+INSERT INTO cuentas (email, password_hash, rol) VALUES
+  ('admin@farmacia.com',    'scrypt:32768:8:1$Lg1haqX1h3Ql0dsh$1d1768ba9b933e7ae3d70b5e29cf4f6cfebcea601136ce984f98e94a3c75b777e5db5aa2c9cf51155950027a0d9eb9d63ad6caf2cd3c868d580dcebfc6187ea1', 'admin'),
+  ('empleado@farmacia.com', 'scrypt:32768:8:1$XX9aXMK0pAyxaQuu$7a88d7085cdc321425b802c9b0fe096b6e119732c5d7faf771c36324455f0219844e48001ab6604953dc92380411ccedd5750c46deae8c9a1c0e321b21c2113b', 'empleado');
