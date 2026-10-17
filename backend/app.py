@@ -7,6 +7,7 @@ from routes.categorias_routes import bp as categorias_bp
 from routes.medicamentos_routes import bp as medicamentos_bp
 from routes.empleados_routes import bp as empleados_bp
 from routes.dashboard_routes import bp as dashboard_bp
+from routes.auth_routes import bp as auth_bp
 
 
 app = Flask(__name__)
@@ -27,6 +28,7 @@ app.register_blueprint(categorias_bp)
 app.register_blueprint(medicamentos_bp)
 app.register_blueprint(empleados_bp)
 app.register_blueprint(dashboard_bp)
+app.register_blueprint(auth_bp)
 
 
 with app.app_context():
