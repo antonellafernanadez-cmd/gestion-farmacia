@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { AppBar, Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import { AppBar, Box, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Logo from "../common/Logo";
 import { colores } from "../../theme";
 import { itemsMenu } from "./navegacion";
+import { useAuth } from "../../context/AuthContext";
+import { useNotificacion } from "../../context/NotificacionContext";
 
 const ANCHO_MENU = 256;
+const ETIQUETA_ROL = { admin: "Administración", empleado: "Empleado" };
 
 // Marco de la app: barra lateral azul oscuro + zona de contenido (<Outlet />).
 export default function Layout() {
@@ -14,13 +18,24 @@ export default function Layout() {
   const { pathname } = useLocation();
   const estaActivo = (ruta) => (ruta === "/" ? pathname === "/" : pathname.startsWith(ruta));
 
+  const { usuario, cerrarSesion } = useAuth();
+  const notificar = useNotificacion();
+  // Cada rol ve solo los módulos que le corresponden
+  const itemsVisibles = itemsMenu.filter((item) => !item.roles || item.roles.includes(usuario?.rol));
+
+  const salir = async () => {
+    setMenuMovilAbierto(false);
+    await cerrarSesion();
+    notificar.exito("Sesión cerrada correctamente");
+  };
+
   const menu = (
-    <Box component="nav" aria-label="Navegación principal" sx={{ height: "100%", bgcolor: colores.azulOscuro, color: "#fff" }}>
+    <Box component="nav" aria-label="Navegación principal" sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: colores.azulOscuro, color: "#fff" }}>
       <Toolbar sx={{ px: 3, py: 2.5 }}>
         <Logo sobreOscuro />
       </Toolbar>
-      <List sx={{ px: 1.5 }}>
-        {itemsMenu.map(({ texto, ruta, icono: Icono }) => (
+      <List sx={{ px: 1.5, flexGrow: 1 }}>
+        {itemsVisibles.map(({ texto, ruta, icono: Icono }) => (
           <ListItemButton
             key={ruta}
             component={NavLink}
@@ -45,6 +60,25 @@ export default function Layout() {
           </ListItemButton>
         ))}
       </List>
+
+      <Divider sx={{ borderColor: "rgba(255,255,255,0.12)" }} />
+      <Box sx={{ p: 2 }}>
+        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+          {ETIQUETA_ROL[usuario?.rol] ?? "Sesión"}
+        </Typography>
+        <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.65)", wordBreak: "break-all" }}>
+          {usuario?.email}
+        </Typography>
+        <ListItemButton
+          onClick={salir}
+          sx={{ mt: 1, px: 1.5, borderRadius: 2, color: "rgba(255,255,255,0.78)", "&:hover": { bgcolor: "rgba(255,255,255,0.06)" } }}
+        >
+          <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Cerrar sesión" slotProps={{ primary: { fontWeight: 500 } }} />
+        </ListItemButton>
+      </Box>
     </Box>
   );
 
