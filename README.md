@@ -1,11 +1,12 @@
 # ValkiFarm
 
-Sistema para gestionar una farmacia. Trabajo práctico de Programación II (IES 9-023).
+Sistema de gestión para una farmacia. 
+Trabajo práctico de Programación II.
 
 ## Integrantes
 
-- COMPLETAR: nombre y apellido
-- COMPLETAR: nombre y apellido
+- Antonella Fernandez
+- Leonel Bustos
 
 ## Descripción
 
@@ -13,7 +14,6 @@ ValkiFarm es una aplicación web para administrar los medicamentos, las categor�
 
 Tiene un dashboard que muestra cuántos medicamentos, categorías y empleados hay, y los medicamentos con poco stock o próximos a vencer. También tiene un login con dos roles: el admin puede entrar a todo, y el empleado no puede entrar a la sección Empleados.
 
-El frontend (React) le pide los datos al backend (Flask), y el backend los guarda en MySQL.
 
 ## Tecnologías utilizadas
 
@@ -47,8 +47,6 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-En Mac o Linux, el tercer comando es `source venv/bin/activate`.
-
 Frontend (desde la carpeta principal del proyecto):
 
 ```
@@ -60,7 +58,7 @@ npm install
 
 El archivo `database/farmacia_db.sql` crea la base `gestion_farmacia` con sus tablas y los datos de prueba: 10 medicamentos, 5 categorías, 5 empleados y 2 usuarios.
 
-Ojo: el script borra la base `gestion_farmacia` si ya existe y la vuelve a crear.
+El script borra la base `gestion_farmacia` si ya existe y la vuelve a crear.
 
 Para ejecutarlo, desde la carpeta principal del proyecto:
 
@@ -87,8 +85,6 @@ Dentro de la carpeta `backend`, copiar el archivo `.env.example` con el nombre `
 copy .env.example .env
 ```
 
-En Mac o Linux: `cp .env.example .env`.
-
 Después abrir el `.env` y completar los datos de tu MySQL (usuario, contraseña, host y puerto). El nombre de la base tiene que ser `gestion_farmacia`. En `SECRET_KEY` se puede poner cualquier texto largo. El `.env` no se sube a GitHub.
 
 ## Configuración del frontend
@@ -99,7 +95,7 @@ Si el backend corre en `http://localhost:5000`, no hace falta configurar nada. S
 
 Con MySQL encendido, hay que abrir dos terminales.
 
-Terminal 1, el backend (queda en `http://localhost:5000`):
+Terminal 1: el backend (queda en `http://localhost:5000`):
 
 ```
 cd backend
@@ -107,7 +103,7 @@ venv\Scripts\activate
 python app.py
 ```
 
-Terminal 2, el frontend (queda en `http://localhost:5173`):
+Terminal 2: el frontend (queda en `http://localhost:5173`):
 
 ```
 cd frontend
@@ -118,8 +114,8 @@ Después abrir `http://localhost:5173` en el navegador e iniciar sesión.
 
 Usuarios de prueba:
 
-- Admin: `admin@farmacia.com` / contraseña: COMPLETAR
-- Empleado: `empleado@farmacia.com` / contraseña: COMPLETAR
+- Admin: `admin@farmacia.com` / contraseña: admin123
+- Empleado: `empleado@farmacia.com` / contraseña: empleado123
 
 Las contraseñas se guardan encriptadas (hash) en la base. Al iniciar sesión, Flask guarda la sesión en una cookie. Las rutas de la API están protegidas en el backend: si no hay sesión responden error 401, y si el usuario es empleado e intenta usar las rutas de empleados responden error 403.
 
@@ -169,10 +165,8 @@ Validaciones principales:
 
 ## Integrantes y distribución de tareas
 
-- COMPLETAR (nombre): COMPLETAR (por ejemplo: base del frontend, pantallas de Categorías y Empleados, diseño)
-- COMPLETAR (nombre): COMPLETAR (por ejemplo: Dashboard, pantalla de Medicamentos, base de datos)
-
-Las dos conocemos y podemos explicar cómo funciona todo el sistema.
+-Antonella Fernandez: backend (modelos, controladores, rutas y validaciones), login con roles y sesiones, base de datos, y ajustes en las pantallas de Dashboard y Medicamentos.
+-Leonel Bustos: frontend (estructura de la aplicación, componentes, diseño con Material UI y las pantallas de Categorías y Empleados).
 
 ## Cómo trabajamos con Git
 
