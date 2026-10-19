@@ -1,11 +1,11 @@
 # ValkiFarm
 
-Sistema para gestionar una farmacia. Trabajo práctico de Programación II (IES 9-023).
+Sistema para gestionar una farmacia.
 
 ## Integrantes
 
-- COMPLETAR: nombre y apellido
-- COMPLETAR: nombre y apellido
+- Antonella Fernandez
+- Bustos Leonel                   
 
 ## Descripción
 
@@ -118,8 +118,8 @@ Después abrir `http://localhost:5173` en el navegador e iniciar sesión.
 
 Usuarios de prueba:
 
-- Admin: `admin@farmacia.com` / contraseña: COMPLETAR
-- Empleado: `empleado@farmacia.com` / contraseña: COMPLETAR
+- Admin: `admin@farmacia.com` / contraseña: 
+- Empleado: `empleado@farmacia.com` / contraseña: 
 
 Las contraseñas se guardan encriptadas (hash) en la base. Al iniciar sesión, Flask guarda la sesión en una cookie. Las rutas de la API están protegidas en el backend: si no hay sesión responden error 401, y si el usuario es empleado e intenta usar las rutas de empleados responden error 403.
 
@@ -167,12 +167,12 @@ Validaciones principales:
 
 
 
-## Integrantes y distribución de tareas
+## Integrantes y distribución de tareas (resumido)
 
-- COMPLETAR (nombre): COMPLETAR (por ejemplo: base del frontend, pantallas de Categorías y Empleados, diseño)
-- COMPLETAR (nombre): COMPLETAR (por ejemplo: Dashboard, pantalla de Medicamentos, base de datos)
-
-Las dos conocemos y podemos explicar cómo funciona todo el sistema.
+- ANTONELLA FERNANDEZ: encargada del backend (Flask, la API y la conexión con MySQL), armó la estructura inicial del proyecto y creó el repositorio de Git.
+- BUSTOS LEONEL: encargado del frontend (React y Material UI) y del diseño de la aplicación.
+- Entre los dos: hicimos otras validaciones, probamos todo junto y revisamos el proyecto antes de entregarlo.
+Los dos conocemos y podemos explicar cómo funciona todo el sistema.
 
 ## Cómo trabajamos con Git
 
